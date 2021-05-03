@@ -171,24 +171,27 @@ export function h<P>(
 ): VNode
 
 // Actual implementation
+// h 函数的职责：创建 VNode
 export function h(type: any, propsOrChildren?: any, children?: any): VNode {
   const l = arguments.length
-  if (l === 2) {
+  if (l === 2) { // 如果传参是2个，第2个参数可能是 props 也可能是 children
     if (isObject(propsOrChildren) && !isArray(propsOrChildren)) {
       // single vnode without props
-      if (isVNode(propsOrChildren)) {
+      if (isVNode(propsOrChildren)) { // 如果传入的对象是 VNode
         return createVNode(type, null, [propsOrChildren])
       }
       // props without children
+      // 如果传入的是 props 而非子节点
       return createVNode(type, propsOrChildren)
     } else {
       // omit props
+      // 如果第二个参数不是对象，那么认为它是子节点
       return createVNode(type, null, propsOrChildren)
     }
   } else {
     if (l > 3) {
       children = Array.prototype.slice.call(arguments, 2)
-    } else if (l === 3 && isVNode(children)) {
+    } else if (l === 3 && isVNode(children)) { // 如果传参是3个，且 children 是 VNode
       children = [children]
     }
     return createVNode(type, propsOrChildren, children)
